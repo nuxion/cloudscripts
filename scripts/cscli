@@ -1,0 +1,58 @@
+#!/bin/bash
+source scripts/env.sh
+source scripts/utils.sh
+
+exit_error() {                         # Function: Exit with error.
+  usage
+  exit 1
+}
+exit_ok() {                         # Function: Exit with error.
+  usage
+  exit 0
+}
+
+usage() {                                 # Function: Print a help message.
+  echo "Usage: $0 [ -i PKG ]" 1>&2 
+}
+
+Help()
+{
+   # Display Help
+   echo "Install packages and services"
+   echo
+   echo "Syntax: $0 [ -i PKG ] [-h]"
+   echo "options:"
+   echo "i     Install a package from shared/commands"
+   echo "h     Print this Help."
+   echo
+}
+
+PKG=""
+while getopts "i:e:h" option; do
+    case $option in
+        i)
+            PKG=${OPTARG}
+            install_command $PKG
+            # echo cmd: $COMMAND
+            ;;
+        e)
+            ENV_FILE=${OPTARG}
+            echo env_file is $option $ENV_FILE
+            ;;
+        h)
+            Help
+            ;;
+        :)
+            echo "Error: -${OPTARG} requires an argument."
+            exit_error
+            ;;
+        \?)
+            echo "Error: Invalid option"
+            usage
+            exit;;
+              
+
+    esac
+done
+                    
+            
