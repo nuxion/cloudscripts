@@ -21,7 +21,7 @@ welcome(){
 }
 
 do_install(){
-    user="$(id -un 2>/dev/null || true)"
+    	user="$(id -un 2>/dev/null || true)"
 
 	sh_c='sh -c'
 	if [ "$user" != 'root' ]; then
@@ -39,14 +39,13 @@ do_install(){
 	fi
 
 
-    if ! command_exists git 
-    then
-        sh_c "apt-get install git -y --no-installrecommends"
-    fi
+	if [ !command_exists git]; then
+ 	       $sh_c "apt-get install git -y --no-installrecommends"
+    	fi
 
-    git clone --branch $BRANCH --depth 1 $GIT_REPO
-    sh_c "cp -R cloudscripts/ /opt"
-    sh_c "cp cloudscripts/scripts/cscli /usr/local/bin" 
+    	git clone --branch $BRANCH --depth 1 $GIT_REPO
+    	$sh_c "cp -R cloudscripts/ /opt"
+	$sh_c "cp cloudscripts/scripts/cscli /usr/local/bin" 
 }
 
 do_install

@@ -29,9 +29,34 @@ after installation you can use standalone scripts or the command line:
 ```
 cscli -i nvidia-driver
 ```
+Example:
+
 
 Installations avalaible could be found in `scripts/commands` dir. 
 
+Output example:
+```
+nuxion@gce-small-cpu-j0z8dr:~/cloudscripts$ sudo cscli -i nvidia-docker
+=> cuda found!
+=> docker found!
+=> nvidia-docker2 not found!
+=> nvidia-docker2 installing... be patient it will take some minutes
+....
+....
+=> nvidia-docker2 installed!
+```
+Commands allow to call each other as dependencies in a simple way (but with the risk of circular dependencies, usually if a commands needs other commands the ideal will be put they as services instead of commands):
+
+```
+cat scripts/commands/nvidia-docker.sh
+#!/bin/bash
+# docs
+# https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+source $BASEDIR/commands/nvidia-driver.sh
+source $BASEDIR/commands/docker.sh
+...
+...
+```
 
 ## Inspirations
 - https://www.serf.io/docs/recipes/event-handler-router.html

@@ -22,7 +22,7 @@ source $BASEDIR/colors.sh
 # PACKAGE VERSIONS
 export GOPL_VERSION="v3.10.0"
 
-source scripts/utils.sh
+source $BASEDIR/utils.sh
 
 exit_error() {                         # Function: Exit with error.
   usage
