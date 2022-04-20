@@ -12,6 +12,20 @@ Tools used:
 - Shell scripts
 - Gomplate for templating
 
+## Starting
+
+```
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | sh
+```
+
+or:
+
+```
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh -o install.sh
+chmod +x install.sh
+sh ./install.sh
+```
+
 ## Inspirations
 - https://www.serf.io/docs/recipes/event-handler-router.html
 - https://github.com/void-linux/void-infrastructure

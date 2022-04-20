@@ -18,6 +18,9 @@ export CURL=/usr/bin/curl
 export COMMANDS="${BASEDIR}/commands"
 export USR_LOCAL_BIN="/usr/local/bin"
 
+export DEBIAN_VERSION=debian11
+export OS_RELEASE=$(. /etc/os-release;echo $ID$VERSION_ID | sed -e 's/\.//g')
+
 source $BASEDIR/colors.sh
 
 # PACKAGE VERSIONS
