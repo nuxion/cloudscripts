@@ -44,7 +44,7 @@ do_install(){
         sh_c "apt-get install git -y --no-installrecommends"
     fi
 
-    git clone --b $BRANCH --depth 1 $GIT_REPO
+    git clone --branch $BRANCH --depth 1 $GIT_REPO
 }
 
 do_install
