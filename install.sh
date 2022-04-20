@@ -45,6 +45,8 @@ do_install(){
     fi
 
     git clone --branch $BRANCH --depth 1 $GIT_REPO
+    sh_c "cp -R cloudscripts/ /opt"
+    sh_c "cp cloudscripts/scripts/cscli /usr/local/bin" 
 }
 
 do_install

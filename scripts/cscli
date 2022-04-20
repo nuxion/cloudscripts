@@ -1,5 +1,27 @@
 #!/bin/bash
-source scripts/env.sh
+# source scripts/env.sh
+if [[ -z "${CS_BASEDIR}" ]]; then
+    # export BASEDIR=$(dirname "$0")
+    export BASEDIR=/opt/cloudscripts/scripts
+else
+    export BASEDIR=${CS_BASEDIR}
+fi
+export PARENTDIR=/opt/cloudscripts
+echo "BASEDIR set as ${BASEDIR}"
+echo "PARENTDIR set as ${PARENTDIR}"
+
+export CURL=/usr/bin/curl
+export COMMANDS="${BASEDIR}/commands"
+export USR_LOCAL_BIN="/usr/local/bin"
+
+export DEBIAN_VERSION=debian11
+export OS_RELEASE=$(. /etc/os-release;echo $ID$VERSION_ID | sed -e 's/\.//g')
+
+source $BASEDIR/colors.sh
+
+# PACKAGE VERSIONS
+export GOPL_VERSION="v3.10.0"
+
 source scripts/utils.sh
 
 exit_error() {                         # Function: Exit with error.
