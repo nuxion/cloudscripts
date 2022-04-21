@@ -71,7 +71,7 @@ do_install(){
 
 	if ! command_exists git
 	then
- 	       $sh_c "apt-get install git -y --no-installrecommends"
+ 	       $sh_c "apt-get install git -y --no-install-recommends"
     	fi
 
     git clone --branch $BRANCH --depth 1 $GIT_REPO
