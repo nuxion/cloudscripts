@@ -57,7 +57,7 @@ install_agnostic(){
 detect_card(){
     lspci | grep NVIDIA &> /dev/null
     if [ "$?" -ne 0 ]; then
-        echo -e "${red}WARNING: NVIDIA card not found, the installation could fail"
+        echo -e "${red}WARNING: NVIDIA card not found, the installation could fail${clear}"
     fi
 }
 

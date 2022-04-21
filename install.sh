@@ -74,7 +74,7 @@ do_install(){
  	       $sh_c "apt-get install git -y --no-installrecommends"
     	fi
 
-    #git clone --branch $BRANCH --depth 1 $GIT_REPO
+    git clone --branch $BRANCH --depth 1 $GIT_REPO
     detect_cloud_provider
     sed -i "s/changeme/${PROVIDER}/g" cloudscripts/scripts/cscli
     $sh_c "cp -R cloudscripts/ /opt"
