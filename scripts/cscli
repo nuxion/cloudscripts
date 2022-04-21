@@ -6,6 +6,7 @@ if [[ -z "${CS_BASEDIR}" ]]; then
 else
     export BASEDIR=${CS_BASEDIR}
 fi
+export CLOUD_PROVIDER="changeme"
 export PARENTDIR=/opt/cloudscripts
 echo "BASEDIR set as ${BASEDIR}"
 echo "PARENTDIR set as ${PARENTDIR}"
@@ -50,7 +51,7 @@ Help()
 }
 
 PKG=""
-while getopts "i:e:h" option; do
+while getopts "i:p:e:h" option; do
     case $option in
         i)
             PKG=${OPTARG}

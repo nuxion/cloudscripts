@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # docs
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html 
 source $BASEDIR/commands/nvidia-driver.sh
@@ -27,17 +27,29 @@ install(){
         systemctl restart docker
 }
 
+verification(){
+    docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi &> /dev/null
+}
+
+clean(){
+    docker image rmi nvidia/cuda:11.0-base &> /dev/null
+}
+
 if ! package_exists $pkg &> /dev/null
 then
 	echo -e "=> ${magenta}${pkg}${clear} not found!"
 	echo -e "=> ${magenta}${pkg}${clear} installing... be patient it will take some minutes"
     install
     status=$?
-    if [ $status -eq 0 ]; then
+    verification
+    verif_status=$?
+    if [ "$status" -eq 0 ] && [ "$verif_status" -eq 0 ]; then
 	    echo -e "=> ${magenta}${pkg}${clear} ${green}installed!${clear}"
     else
 	    echo -e "[X] ${red}${pkg} installation failed!${clear}"
     fi
+    echo -e "=> Cleaning"
+    clean
 else
 	echo -e "=> ${magenta}${pkg}${clear} found!"
 fi

@@ -61,6 +61,8 @@ source $BASEDIR/commands/docker.sh
 ## Inspirations
 - https://www.serf.io/docs/recipes/event-handler-router.html
 - https://github.com/void-linux/void-infrastructure
+- https://www.funtoo.org/Bash_by_Example,_Part_3
+- https://www.michaelwashere.net/post/2020-03-23-config-binding/
  
 
 
