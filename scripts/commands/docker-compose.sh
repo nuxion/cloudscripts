@@ -3,17 +3,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-pkg="docker"
+pkg="docker-compose"
 
 install(){
-    apt-get install apt-transport-https ca-certificates curl gnupg lsb-release -y
-    $CURL -sSL https://get.docker.com/ | sh
-
+    curl -sL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
 }
 
 verification(){
     # docker ps &> /dev/null
-    docker &> /dev/null
+    docker-compose --version &> /dev/null
 
 }
 
