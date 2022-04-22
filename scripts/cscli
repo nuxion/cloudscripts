@@ -1,5 +1,6 @@
 #!/bin/bash
 # source scripts/env.sh
+VERSION="0.1.0-RC"
 if [[ -z "${CS_BASEDIR}" ]]; then
     # export BASEDIR=$(dirname "$0")
     export BASEDIR=/opt/cloudscripts/scripts
@@ -7,7 +8,7 @@ else
     export BASEDIR=${CS_BASEDIR}
 fi
 export CLOUD_PROVIDER="changeme"
-export PARENTDIR=/opt/cloudscripts
+export PARENTDIR="/opt/cloudscripts-${VERSION}"
 echo "BASEDIR set as ${BASEDIR}"
 echo "PARENTDIR set as ${PARENTDIR}"
 
@@ -46,21 +47,21 @@ Help()
    echo "Syntax: $0 [ -i PKG ] [-h]"
    echo "options:"
    echo "i     Install a package from shared/commands"
+   echo "v     Version of cscli"
    echo "h     Print this Help."
    echo
 }
 
 PKG=""
-while getopts "i:p:e:h" option; do
+while getopts "i:v:h" option; do
     case $option in
         i)
             PKG=${OPTARG}
             install_command $PKG
             # echo cmd: $COMMAND
             ;;
-        e)
-            ENV_FILE=${OPTARG}
-            echo env_file is $option $ENV_FILE
+        v)
+            echo ${VERSION}
             ;;
         h)
             Help
