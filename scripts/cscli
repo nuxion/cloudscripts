@@ -1,29 +1,36 @@
 #!/bin/bash
 # source scripts/env.sh
 VERSION="0.1.0-RC"
+
 if [[ -z "${CS_BASEDIR}" ]]; then
     # export BASEDIR=$(dirname "$0")
-    export BASEDIR=/opt/cloudscripts/scripts
+    export BASEDIR="/opt/cloudscripts-${VERSION}/scripts"
 else
     export BASEDIR=${CS_BASEDIR}
 fi
-export CLOUD_PROVIDER="changeme"
+# commons paths, variables & commands
 export PARENTDIR="/opt/cloudscripts-${VERSION}"
+export COMMANDS="${BASEDIR}/commands"
+export SERVICES="${BASEDIR}/services"
+export CURL=/usr/bin/curl
+export USR_LOCAL_BIN="/usr/local/bin"
+export CLOUD_PROVIDER="changeme"
+
+if [[ -z "${CS_ENV_FILE}" ]]; then
+    ENV_FILE="${BASEDIR}/env.sh"
+else
+    ENV_FILE="${CS_ENV_FILE}"
+fi
+
+    
 echo "BASEDIR set as ${BASEDIR}"
 echo "PARENTDIR set as ${PARENTDIR}"
+echo "ENV_FILE set as ${ENV_FILE}"
+echo "CLOUD_PROVIDER set as ${CLOUD_PROVIDER}"
 
-export CURL=/usr/bin/curl
-export COMMANDS="${BASEDIR}/commands"
-export USR_LOCAL_BIN="/usr/local/bin"
-
-export DEBIAN_VERSION=debian11
-export OS_RELEASE=$(. /etc/os-release;echo $ID$VERSION_ID | sed -e 's/\.//g')
-
+# Imports
+source $ENV_FILE
 source $BASEDIR/colors.sh
-
-# PACKAGE VERSIONS
-export GOPL_VERSION="v3.10.0"
-
 source $BASEDIR/utils.sh
 
 exit_error() {                         # Function: Exit with error.
@@ -47,18 +54,24 @@ Help()
    echo "Syntax: $0 [ -i PKG ] [-h]"
    echo "options:"
    echo "i     Install a package from shared/commands"
+   echo "d     Deploy a service"
    echo "v     Version of cscli"
    echo "h     Print this Help."
    echo
 }
 
 PKG=""
-while getopts "i:v:h" option; do
+while getopts "i:s:v:h" option; do
     case $option in
         i)
             PKG=${OPTARG}
             install_command $PKG
             # echo cmd: $COMMAND
+            ;;
+        d)
+            SERVICE=${OPTARG}
+            source $BASEDIR/metadata.sh
+            deploy_service $SERVICE
             ;;
         v)
             echo ${VERSION}

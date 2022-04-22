@@ -7,6 +7,11 @@ PROVIDER="undetected"
 VERSION="0.1.0-RC"
 INSTALLDIR="/opt/cloudscripts"
 
+# METADATA services by provider
+AWS_META="http://169.254.169.254/latest/meta-data/"
+GCE_META="http://metadata.google.internal/computeMetadata/v1/"
+
+
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
 }
@@ -25,7 +30,7 @@ final(){
 
 is_aws()
 {
-    curl -s "http://169.254.169.254/latest/meta-data/" -o /dev/null
+    curl -s "${AWS_META}" -o /dev/null
     status=$?
     if [ "$status" -eq 0 ];then
        echo "aws"
@@ -34,7 +39,7 @@ is_aws()
 
 is_gce()
 {
-    curl -s "http://metadata.google.internal/computeMetadata/v1/instance" -H "Metadata-Flavor: Google" -o /dev/null
+    curl -s "${GCE_META}instance" -H "Metadata-Flavor: Google" -o /dev/null
     status=$?
     if [ "$status" -eq 0 ];then
        echo "gce"

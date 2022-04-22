@@ -1,0 +1,18 @@
+version: "3.5"
+volumes:
+  pgdata:
+#  # pgadmin:
+
+services:
+  postgres:
+    image: postgres:{{ getenv "POSTGRES_VERSION" }}
+    env_file: .env.docker
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - {{ getenv "POSTGRES_ADDRESS" }}:{{ getenv "POSTGRES_PORT" }}
+    networks:
+      - postgres
+networks:
+  postgres: 

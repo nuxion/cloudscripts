@@ -9,4 +9,11 @@ install_command()
     pkg=$1
     source "${COMMANDS}/${pkg}.sh"
 }
+
+deploy_service(){
+    srv=$1
+    source "${SERVICES}/${srv}/deploy.sh"
+}
+
+export f install_service
 export -f install_command
