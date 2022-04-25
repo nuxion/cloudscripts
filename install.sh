@@ -1,10 +1,11 @@
 #!/bin/sh
 set -e
-
-BRANCH=${1:-main}
-GIT_REPO="https://github.com/nuxion/cloudscripts/"
-PROVIDER="undetected"
+STRATEGY=${1:-tar}
+BRANCH=${2:-main}
 VERSION="0.1.0-RC"
+GIT_REPO="https://github.com/nuxion/cloudscripts/"
+TAR_REPO="https://github.com/nuxion/cloudscripts/archive/refs/tags/${VERSION}.tar.gz"
+PROVIDER="undetected"
 INSTALLDIR="/opt/cloudscripts"
 
 # METADATA services by provider
@@ -25,7 +26,7 @@ welcome(){
 }
 
 final(){
-    echo "[OK] cscli installed on /usr/local/bin :)" 
+    echo "[OK] cscli installed on /usr/local/bin :)"
 }
 
 is_aws()
@@ -59,6 +60,46 @@ detect_cloud_provider(){
     echo "=> Provider identified as ${PROVIDER}"
 }
 
+check_folder(){
+    folder=$1
+    if [ -d "${folder}" ];then
+       echo "[X] a ${folder} found, delete it first or modify the installation script"
+       exit 1
+    fi
+
+}
+
+git_install(){
+    echo $INSTALLDIR
+    check_folder $INSTALLDIR
+    if ! command_exists git
+    then
+        echo "=> Installing git"
+    	$sh_c "apt-get install git -y --no-install-recommends > /dev/null 2>&1"
+    fi
+    git clone --quiet --branch $BRANCH --depth 1 $GIT_REPO
+    echo "=> Cloning cloudscripts from ${GIT_REPO}"
+    $sh_c "cp -R cloudscripts/ /opt"
+    echo "=> Script files moved to /opt/cloudscripts"
+    $sh_c "cp cloudscripts/scripts/cscli /usr/local/bin"
+}
+
+
+tar_install(){
+    check_folder "${INSTALLDIR}-${VERSION}"
+    curl -sL ${TAR_REPO} -o /tmp/${VERSION}.tgz
+    echo "=> Downloading releases files from ${TAR_REPO}"
+    if [ $? -ne 0 ]; then
+        echo "[X] Downloaded failed"
+    fi
+    echo "=> Extracting files into /tmp/${VERSION}"
+    tar xfz "/tmp/${VERSION}.tgz"
+    sed -i "s/changeme/${PROVIDER}/g" /tmp/cloudscripts-${VERSION}/scripts/cscli
+    $sh_c "mv cloudscripts-${VERSION} ${INSTALLDIR}-${VERSION}"
+    $sh_c "cp ${INSTALLDIR}-${VERSION}/scripts/cscli /usr/local/bin"
+    echo "=> Script files moved to ${INSTALLDIR}-${VERSION}"
+}
+
 do_install(){
     	user="$(id -un 2>/dev/null || true)"
 
@@ -76,29 +117,13 @@ do_install(){
 			exit 1
 		fi
 	fi
+	detect_cloud_provider
+    if [ STRATEGY = "tar" ]; then
+        tar_install
+    else
+        git_install
+    fi
 
-	# if ! command_exists git
-	# then
- 	#       $sh_c "apt-get install git -y --no-install-recommends"
-    # 	fi
-    # git clone --branch $BRANCH --depth 1 $GIT_REPO
-    detect_cloud_provider
-    URL="https://github.com/nuxion/cloudscripts/archive/refs/tags/${VERSION}.tar.gz"
-    curl -sL ${URL} -o /tmp/${VERSION}.tgz
-    echo "=> Downloading releases files from ${URL}" 
-    if [ $? -ne 0 ]; then
-        echo "[X] Downloaded failed"
-    fi
-    echo "=> Extracting files into /tmp/${VERSION}" 
-    tar xfz "/tmp/${VERSION}.tgz" 
-    sed -i "s/changeme/${PROVIDER}/g" /tmp/cloudscripts-${VERSION}/scripts/cscli
-    if [ -d "${INSTALLDIR}-${VERSION}" ];then
-       echo "[X] a ${INSTALLDIR}-${VERSION} found, delete it first or modify the installation script"
-       exit 1
-    fi
-    $sh_c "mv cloudscripts-${VERSION} ${INSTALLDIR}-${VERSION}"
-    $sh_c "cp ${INSTALLDIR}-${VERSION}/scripts/cscli /usr/local/bin"
-    echo "=> Script files moved to ${INSTALLDIR}-${VERSION}" 
 }
 welcome
 do_install

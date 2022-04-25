@@ -17,8 +17,3 @@ deploy(){
     cd "${service_path}"
     docker-compose up -d
 }
-
-gomplate -d config=./config.yaml -f templates/dnsmasq.conf > rendered/dnsmasq.conf
-mv rendered/dnsmasq.conf /etc/dnsmasq.conf
-systemctl restart dnsmasq
-dig @localhost $HOSTNAME
