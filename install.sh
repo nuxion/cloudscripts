@@ -93,9 +93,9 @@ tar_install(){
         echo "[X] Downloaded failed"
     fi
     echo "=> Extracting files into /tmp/${VERSION}"
-    tar xfz "/tmp/${VERSION}.tgz"
+    tar xfz "/tmp/${VERSION}.tgz" -C /tmp
     sed -i "s/changeme/${PROVIDER}/g" /tmp/cloudscripts-${VERSION}/scripts/cscli
-    $sh_c "mv cloudscripts-${VERSION} ${INSTALLDIR}-${VERSION}"
+    $sh_c "mv /tmp/cloudscripts-${VERSION} ${INSTALLDIR}-${VERSION}"
     $sh_c "cp ${INSTALLDIR}-${VERSION}/scripts/cscli /usr/local/bin"
     echo "=> Script files moved to ${INSTALLDIR}-${VERSION}"
 }
@@ -118,7 +118,7 @@ do_install(){
 		fi
 	fi
 	detect_cloud_provider
-    if [ STRATEGY = "tar" ]; then
+    if [ "${STRATEGY}" = 'tar' ]; then
         tar_install
     else
         git_install
