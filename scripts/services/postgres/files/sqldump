@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+# This is a simple script to create user services with full privileges.
+# Be careful!. 
+
+DOCKER_IMAGE="postgres"
+OUTPUT="backups/dump.$(date +%Y%m%d).sql"
+# Docker creation
+docker-compose exec $DOCKER_IMAGE pg_dumpall -U postgres > $OUTPUT
+echo "done"
