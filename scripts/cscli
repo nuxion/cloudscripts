@@ -1,6 +1,6 @@
 #!/bin/bash
 # source scripts/env.sh
-VERSION="0.1.0"
+VERSION="0.1.1"
 
 if [[ -z "${CS_BASEDIR}" ]]; then
     # export BASEDIR=$(dirname "$0")
