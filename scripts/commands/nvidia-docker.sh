@@ -4,6 +4,8 @@
 source $BASEDIR/commands/nvidia-driver.sh
 source $BASEDIR/commands/docker.sh
 
+IMG_VERIFICATION="nvidia/cuda:11.0.3-base-ubuntu18.04"
+
 pkg="nvidia-docker2"
 
 command_exists() {
@@ -28,11 +30,11 @@ install(){
 }
 
 verification(){
-    docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi &> /dev/null
+    docker run --rm --gpus all ${IMG_VERIFICATION} nvidia-smi &> /dev/null
 }
 
 clean(){
-    docker image rmi nvidia/cuda:11.0-base &> /dev/null
+    docker image rmi ${IMG_VERIFICATION} &> /dev/null
 }
 
 if ! package_exists $pkg &> /dev/null
