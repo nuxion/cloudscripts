@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 # docs
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html 
-source $BASEDIR/commands/nvidia-driver.sh
-source $BASEDIR/commands/docker.sh
-
 URL="https://caddyserver.com/api/download?os=linux&arch=amd64&idempotency=371179942471"
 
 pkg="caddy"
