@@ -12,7 +12,7 @@ command_exists() {
 install(){
     # apt install -t bullseye-backports nvidia-driver firmware-misc-nonfree --yes
     $CURL -Ls $URL > /tmp/caddy
-    mv /tmp/caddy $USR_LOCAL_BIN
+    mv /tmp/caddy $USR_LOCAL_BIN/
     chmod +x $USR_LOCAL_BIN/caddy
 }
 
@@ -21,7 +21,7 @@ verification(){
 }
 
 clean(){
-    rm $USR_LOCAL_BIN/caddy
+    echo "Nothing to clean"
 }
 
 if ! command_exists $pkg &> /dev/null
