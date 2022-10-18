@@ -1,8 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+set -o pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+
 STRATEGY=${1:-tar}
 BRANCH=${2:-main}
-VERSION="0.2.0"
+VERSION="0.3.0"
 GIT_REPO="https://github.com/nuxion/cloudscripts/"
 TAR_REPO="https://github.com/nuxion/cloudscripts/archive/refs/tags/${VERSION}.tar.gz"
 PROVIDER="undetected"
@@ -15,6 +19,25 @@ GCE_META="http://metadata.google.internal/computeMetadata/v1/"
 
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
+}
+
+package_exists() {
+    dpkg -s "$@"
+}
+
+install_basics() {
+    if ! package_exists "gnupg2" &> /dev/null
+    then
+       apt-get install gnupg2 --yes
+    fi
+    if ! package_exists "lsb-release" &> /dev/null
+    then
+       apt-get install lsb-release --yes
+    fi
+    if ! package_exists "curl" &> /dev/null
+    then
+       apt-get install curl --yes
+    fi
 }
 
 welcome(){
@@ -31,30 +54,40 @@ final(){
 
 is_aws()
 {
-    curl -s "${AWS_META}" -o /dev/null
-    status=$?
-    if [ "$status" -eq 0 ];then
-       echo "aws"
+    echo "=> Testing AWS"
+    status=$(curl -sSl --connection-timeout 5  "${AWS_META}")
+    echo "status: ${status}"
+    if [ ! -z "$status"];
+    then
+        if [ "$status" -eq 0 ];then
+              PROVIDER="aws"
+        fi
     fi
 }
 
 is_gce()
 {
-    curl -s "${GCE_META}instance" -H "Metadata-Flavor: Google" -o /dev/null
-    status=$?
-    if [ "$status" -eq 0 ];then
-       echo "gce"
+    echo "=> Testing Google"
+    status=$(curl -sSL "${GCE_META}instance" -H "Metadata-Flavor: Google")
+    echo "status: ${status}"
+    if [ ! -z "$status"];
+    then
+        if [ "$status" -eq 0 ];then
+              PROVIDER="gce"
+        fi
     fi
+              
 }
 
 detect_cloud_provider(){
-    PROVIDER=$( is_gce )
-    echo $PROVIDER
+    echo "=> Detecting provider"
+    is_gce || true
     if [ $PROVIDER != "gce" ]; then
-        PROVIDER=$( is_aws )
+        is_aws || true
         echo "=> WARNING: Some scripts could not work in AMAZON AWS provider"
         if [ $PROVIDER != "aws" ]; then
-            echo "=> WARNING: nor GCE nor AWS cloud env found"
+            echo "=> WARNING: nor GCE nor AWS cloud env found, setting as custom"
+            PROVIDER="custom"
         fi
     fi
     echo "=> Provider identified as ${PROVIDER}"
@@ -70,6 +103,7 @@ check_folder(){
 }
 
 git_install(){
+    echo "=> Starting git install"
     echo $INSTALLDIR
     check_folder $INSTALLDIR
     if ! command_exists git
@@ -86,6 +120,7 @@ git_install(){
 
 
 tar_install(){
+    echo "=> Starting tar install"
     check_folder "${INSTALLDIR}-${VERSION}"
     curl -sL ${TAR_REPO} -o /tmp/${VERSION}.tgz
     echo "=> Downloading releases files from ${TAR_REPO}"
@@ -97,11 +132,20 @@ tar_install(){
     sed -i "s/changeme/${PROVIDER}/g" /tmp/cloudscripts-${VERSION}/scripts/cscli
     $sh_c "mv /tmp/cloudscripts-${VERSION} ${INSTALLDIR}-${VERSION}"
     $sh_c "cp ${INSTALLDIR}-${VERSION}/scripts/cscli /usr/local/bin"
-    echo "=> Script files moved to ${INSTALLDIR}-${VERSION}"
+    echo "=> Script installed into ${INSTALLDIR}-${VERSION}"
+}
+
+dev_install(){
+    echo "=> Starting dev install"
+    check_folder "${INSTALLDIR}-${VERSION}"
+    mkdir -p ${INSTALLDIR}-${VERSION}
+    cp -R scripts/ ${INSTALLDIR}-${VERSION}/
+    cp scripts/cscli /usr/local/bin
+    echo "=> Script files installed into ${INSTALLDIR}-${VERSION}"
 }
 
 do_install(){
-    	user="$(id -un 2>/dev/null || true)"
+    user="$(id -un 2>/dev/null || true)"
 
 	sh_c='sh -c'
 	if [ "$user" != 'root' ]; then
@@ -120,11 +164,14 @@ do_install(){
 	detect_cloud_provider
     if [ "${STRATEGY}" = 'tar' ]; then
         tar_install
-    else
+	elif [ '${STRATEGY}' = "git" ]; then
         git_install
+    else
+        dev_install
     fi
 
 }
 welcome
+install_basics
 do_install
 final

@@ -1,0 +1,10 @@
+FROM debian:11.5
+
+LABEL maintainer="Xavier Petit <nuxion@gmail.com>"
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y gnupg2 lsb-release curl \
+    && mkdir /app
+# SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /app
+
