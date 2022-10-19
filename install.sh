@@ -137,7 +137,9 @@ tar_install(){
 
 dev_install(){
     echo "=> Starting dev install"
-    check_folder "${INSTALLDIR}-${VERSION}"
+    if [ -d "${folder}" ];then
+       rm -Rf "${INSTALLDIR}-${VERSION}"
+    fi
     mkdir -p ${INSTALLDIR}-${VERSION}
     cp -R scripts/ ${INSTALLDIR}-${VERSION}/
     cp scripts/cscli /usr/local/bin
