@@ -71,6 +71,10 @@ source $BASEDIR/commands/docker.sh
 
 ## Stability
 
+
+** :warning: Last stable release is 0.2.0, pin to that version for now **
+
+
 It is being used in production for quick provisiong using packer as image builder: mostly for docker and docker-compose. 
 
 I try to follow [semver](https://semver.org/), it's mean cscli will have a Stable API during minor versions, for now it is very simple:
@@ -108,7 +112,10 @@ Also all the scripts are using variables and relative paths, base path and varia
 - https://www.funtoo.org/Bash_by_Example,_Part_3
 - https://www.michaelwashere.net/post/2020-03-23-config-binding/
  
+## Cloud provider detection
 
+check: https://github.com/dgzlopes/cloud-detect/blob/master/cloud_detect/providers/azure_provider.py
+/sys/class/dmi/id/sys_vendor
 
 
 
