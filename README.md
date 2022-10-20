@@ -16,14 +16,14 @@ Tools used:
 ## Starting
 
 ```
-curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | sh
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | bash
 ```
 or:
 
 ```
 curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh -o install.sh
 chmod +x install.sh
-sh ./install.sh
+./install.sh
 ```
 
 after installation you can use standalone scripts or the command line:

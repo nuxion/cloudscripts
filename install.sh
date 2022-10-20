@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 STRATEGY=${1:-tar}
 BRANCH=${2:-main}
-VERSION="0.3.0"
+VERSION="0.4.0"
 GIT_REPO="https://github.com/nuxion/cloudscripts/"
 TAR_REPO="https://github.com/nuxion/cloudscripts/archive/refs/tags/${VERSION}.tar.gz"
 PROVIDER="undetected"
