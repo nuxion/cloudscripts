@@ -34,6 +34,8 @@ chmod +x install.sh
 ./install.sh
 ```
 
+:warning: *Note*: If you are using it in a ci/cd workflow, some system requires an `apt-get update` first. 
+
 after installation you can use standalone scripts or the command line:
 ```
 cscli -i nvidia-driver
