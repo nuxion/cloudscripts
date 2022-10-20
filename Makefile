@@ -20,6 +20,7 @@ GIT_TAG := $(shell git describe --tags)
 PROJECTNAME := $(shell basename "$(PWD)")
 PACKAGE_DIR = $(shell basename "$(PWD)")
 DOCKERID = $(shell echo "nuxion")
+VERSION="0.1.0"
 
 .PHONY: dev
 dev:
@@ -28,4 +29,11 @@ dev:
 .PHONY: docker-dev
 docker-dev:
 	docker build -t ${DOCKERID}/${PACKAGE_DIR}-dev -f Dockerfile.dev .
+
+.PHONY: release
+release:
+	  ./release.sh 
+
+last:
+	git describe --tags
 

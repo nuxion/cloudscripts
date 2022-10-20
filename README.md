@@ -16,7 +16,7 @@ Tools used:
 ## Starting
 
 ```
-curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | bash
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | sh
 ```
 or if you want to pin a version:
 
@@ -24,7 +24,7 @@ or if you want to pin a version:
 https://raw.githubusercontent.com/nuxion/cloudscripts/<version>/install.sh
 ```
 
-Where `<version>` will match we the tags available in this repo. 
+Where `<version>` should match with the tags available in this repo. 
 
 or if you want to check the install code first:
 
@@ -33,7 +33,11 @@ curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh -
 chmod +x install.sh
 ./install.sh
 ```
+From `VERSION<=0.5.0`, a version could be pined from the installation:
 
+```
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | VERSION=0.2.0 sh
+```
 :warning: *Note*: If you are using it in a ci/cd workflow, some system requires an `apt-get update` first. 
 
 after installation you can use standalone scripts or the command line:
@@ -41,7 +45,6 @@ after installation you can use standalone scripts or the command line:
 cscli -i nvidia-driver
 ```
 Example:
-
 
 Installations avalaible could be found in `scripts/commands` dir. 
 
@@ -71,10 +74,6 @@ source $BASEDIR/commands/docker.sh
 
 ## Stability
 
-
-** :warning: Last stable release is 0.2.0, pin to that version for now **
-
-
 It is being used in production for quick provisiong using packer as image builder: mostly for docker and docker-compose. 
 
 I try to follow [semver](https://semver.org/), it's mean cscli will have a Stable API during minor versions, for now it is very simple:
@@ -87,7 +86,12 @@ Options could be added between minor releases during **0.x.z** releases, but nev
 
 Meanwhile internal structure inside `scripts/` could change, how commands are defined internally could change, but the `command` dir and the way in that "source" import other scripts as dependencies will be maintained through minor releases. 
 
-Finally, the **install.sh** script only downloads the last tag from github and never deletes old installations (usually in /opt/cloudscripts-${VERSION} folder) but it replaces /usr/local/bin/cscli pointing to the new version installed. 
+Finally, the **install.sh** script only downloads the last tag from github and never deletes old installations (usually in /opt/cloudscripts-${VERSION} folder) but it replaces /usr/local/bin/cscli pointing to the new version installed.
+
+The observant people will notice a GAP between version 0.2.0 and 0.5.0. The versions in between were buggy and they were removed.
+
+We follow semantic version. Until we reach version 1.0.0, Minor version is used as breaking changes between the API and the structure of the command scripts.  
+New commands (software available) added will modify the patch part of the version: `MAJOR.MINOR.patch`  
 
 ## Concepts
 
@@ -105,6 +109,14 @@ Custom commands could be added inside the "scripts/commands", the only thing tha
 
 Also all the scripts are using variables and relative paths, base path and variables can be changed in cscli, env.sh and install.sh in a forked project. 
 
+## Release
+
+1. Update versions files:
+```
+make release VERSION=${NEW_VERSION}
+```
+
+2. `git add . && git commit && git tag -a ${NEW_VERSION} && git push`
 
 ## Inspirations
 - https://www.serf.io/docs/recipes/event-handler-router.html

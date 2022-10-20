@@ -1,12 +1,15 @@
 #!/bin/bash
 set -e
-set -o pipefail
+# set -o pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
 STRATEGY=${1:-tar}
 BRANCH=${2:-main}
-VERSION="0.4.0"
+if [[ -z "${VERSION}" ]];
+then
+    VERSION=0.5.0
+fi
 GIT_REPO="https://github.com/nuxion/cloudscripts/"
 TAR_REPO="https://github.com/nuxion/cloudscripts/archive/refs/tags/${VERSION}.tar.gz"
 PROVIDER="undetected"
