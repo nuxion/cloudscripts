@@ -36,5 +36,5 @@ terraform.rc
 .env
 .envrc
 \#*
-
+.terraform.lock.hcl
 

@@ -4,11 +4,6 @@ variable "project_id" {
  type = string
 }
 
-variable "credentials_file_path" {
- description = "Google Cloud service credential file"
- type = string
-}
-
 variable "region" {
   description = "Region"
   type = string

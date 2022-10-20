@@ -80,6 +80,25 @@ is_gce()
               
 }
 
+detect_cloud_provider2(){
+	PROVIDER="undefined"
+	vendor=$(cat /sys/class/dmi/id/sys_vendor)
+	vendor2=$(cat /sys/class/dmi/id/product_version)
+
+	if [ "$vendor" = "Google" ];
+	then
+		PROVIDER="gce"
+	elif [ "$vendor" = "Microsoft Corporation" ];
+	then
+		PROVIDER="azure"
+	elif [ "$vendor2" = "amazon" ];
+	then
+		PROVIDER="aws"
+	fi
+
+	echo "=> Provider identified as $PROVIDER"
+}
+
 detect_cloud_provider(){
     echo "=> Detecting provider"
     is_gce || true
@@ -166,7 +185,7 @@ do_install(){
 	fi
     install_basics
 
-	detect_cloud_provider
+	detect_cloud_provider2
     if [ "${STRATEGY}" = 'tar' ]; then
         tar_install
 	elif [ '${STRATEGY}' = "git" ]; then
