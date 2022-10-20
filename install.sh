@@ -26,6 +26,7 @@ package_exists() {
 }
 
 install_basics() {
+
     if ! package_exists "gnupg2" &> /dev/null
     then
        $sh_c "apt-get install gnupg2 --yes"

@@ -18,7 +18,15 @@ Tools used:
 ```
 curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | bash
 ```
-or:
+or if you want to pin a version:
+
+```
+https://raw.githubusercontent.com/nuxion/cloudscripts/<version>/install.sh
+```
+
+Where `<version>` will match we the tags available in this repo. 
+
+or if you want to check the install code first:
 
 ```
 curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh -o install.sh
