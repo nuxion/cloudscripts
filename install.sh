@@ -28,15 +28,15 @@ package_exists() {
 install_basics() {
     if ! package_exists "gnupg2" &> /dev/null
     then
-       apt-get install gnupg2 --yes
+       $sh_c "apt-get install gnupg2 --yes"
     fi
     if ! package_exists "lsb-release" &> /dev/null
     then
-       apt-get install lsb-release --yes
+       $sh_c "apt-get install lsb-release --yes"
     fi
     if ! package_exists "curl" &> /dev/null
     then
-       apt-get install curl --yes
+       $sh_c "apt-get install curl --yes"
     fi
 }
 
@@ -141,8 +141,8 @@ dev_install(){
        rm -Rf "${INSTALLDIR}-${VERSION}"
     fi
     mkdir -p ${INSTALLDIR}-${VERSION}
-    cp -R scripts/ ${INSTALLDIR}-${VERSION}/
-    cp scripts/cscli /usr/local/bin
+    $sh_c "cp -R scripts/ ${INSTALLDIR}-${VERSION}/"
+    $sh_c "cp scripts/cscli /usr/local/bin"
     echo "=> Script files installed into ${INSTALLDIR}-${VERSION}"
 }
 
@@ -163,6 +163,8 @@ do_install(){
 			exit 1
 		fi
 	fi
+    install_basics
+
 	detect_cloud_provider
     if [ "${STRATEGY}" = 'tar' ]; then
         tar_install
@@ -174,6 +176,5 @@ do_install(){
 
 }
 welcome
-install_basics
 do_install
 final
