@@ -2,7 +2,7 @@
 
 This is a collections of different scripts used for software and server provisioning in the context of cloud, usually docker, some networking configurations and so forth. 
 
-I used to use ansible in a push strategy approach (from client or bastion to servers), however with the introduction of different [HashiCorp tools](https://terraform.io/), this strategy started to be cumbersome. Instead, I would like that each server execute by their self the related scripts using environment knowledge provided by the cloud platform like Metadata server, labels & tags, etcd servers, in a [pull strategy approach](https://www.michaelwashere.net/post/2020-03-23-config-binding/).
+I used to use ansible in a push strategy approach (from client or bastion to servers), however with the introduction of different [HashiCorp tools](https://terraform.io/), this strategy started to be cumbersome. Instead, eeach server will execute their related scripts using environment knowledge provided by the cloud platform like Metadata server, labels & tags, etcd servers, in a [pull strategy approach](https://www.michaelwashere.net/post/2020-03-23-config-binding/).
 
 For the time being, this runs over GCE cloud, debian like S.O., and systemd, but it should be easy to adapt for other providers and S.O, besides some scripts are agnostics like docker installation script. Let me know if you are interest in other providers, or tools. 
 
@@ -16,7 +16,7 @@ Tools used:
 ## Starting
 
 ```
-curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | sh
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | bash
 ```
 or if you want to pin a version:
 
@@ -59,18 +59,8 @@ nuxion@gce-small-cpu-j0z8dr:~/cloudscripts$ sudo cscli -i nvidia-docker
 ....
 => nvidia-docker2 installed!
 ```
-Commands allow to call each other as dependencies in a simple way (but with the risk of circular dependencies, usually if a commands needs other commands the ideal will be put they as services instead of commands):
 
-```
-cat scripts/commands/nvidia-docker.sh
-#!/bin/bash
-# docs
-# https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
-source $BASEDIR/commands/nvidia-driver.sh
-source $BASEDIR/commands/docker.sh
-...
-...
-```
+For command available check [commands](scripts/commands)
 
 ## Stability
 
