@@ -127,18 +127,20 @@ check_folder(){
 
 git_install(){
     echo "=> Starting git install"
-    echo $INSTALLDIR
-    check_folder $INSTALLDIR
+    echo $INSTALLDIR-${VERSION}
+    check_folder "${INSTALLDIR}-${VERSION}"
     if ! command_exists git
     then
         echo "=> Installing git"
     	$sh_c "apt-get install git -y --no-install-recommends > /dev/null 2>&1"
     fi
-    git clone --quiet --branch $BRANCH --depth 1 $GIT_REPO
+    git clone --quiet --branch $BRANCH --depth 1 $GIT_REPO ${INSTALL_DIR}-${VERSION}
     echo "=> Cloning cloudscripts from ${GIT_REPO}"
-    $sh_c "cp -R cloudscripts/ /opt"
-    echo "=> Script files moved to /opt/cloudscripts"
-    $sh_c "cp cloudscripts/scripts/cscli /usr/local/bin"
+    sed -i "s/changeme/${PROVIDER}/g" ${INSTALLDIR}-${VERSION}/scripts/cscli
+    sed -i "/^VERSION/c\VERSION=${VERSION}" ${INSTALLDIR}-${VERSION}/scripts/cscli
+    # $sh_c "mv cloudscripts/ /opt/cloudscripts-${VERSION}"
+    # echo "=> Script files moved to /opt/cloudscripts-${VERSION}"
+    # $sh_c "cp ${INSTALL_DIR}-${VERSION}/scripts/cscli /usr/local/bin"
 }
 
 
@@ -153,6 +155,7 @@ tar_install(){
     echo "=> Extracting files into /tmp/${VERSION}"
     tar xfz "/tmp/${VERSION}.tgz" -C /tmp
     sed -i "s/changeme/${PROVIDER}/g" /tmp/cloudscripts-${VERSION}/scripts/cscli
+    sed -i "/^VERSION/c\VERSION=${VERSION}" /tmp/cloudscripts-${VERSION}/scripts/cscli
     $sh_c "mv /tmp/cloudscripts-${VERSION} ${INSTALLDIR}-${VERSION}"
     $sh_c "cp ${INSTALLDIR}-${VERSION}/scripts/cscli /usr/local/bin"
     echo "=> Script installed into ${INSTALLDIR}-${VERSION}"
@@ -166,6 +169,8 @@ dev_install(){
     mkdir -p ${INSTALLDIR}-${VERSION}
     $sh_c "cp -R scripts/ ${INSTALLDIR}-${VERSION}/"
     $sh_c "cp scripts/cscli /usr/local/bin"
+    sed -i "s/changeme/${PROVIDER}/g" /usr/local/bin/cscli
+    sed -i "/^VERSION/c\VERSION=${VERSION}" /usr/local/bin/cscli
     echo "=> Script files installed into ${INSTALLDIR}-${VERSION}"
 }
 

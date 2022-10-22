@@ -26,6 +26,7 @@ fi
 echo "BASEDIR set as ${BASEDIR}"
 echo "PARENTDIR set as ${PARENTDIR}"
 echo "ENV_FILE set as ${ENV_FILE}"
+echo "VERSION set as ${VERSION}"
 echo "CLOUD_PROVIDER set as ${CLOUD_PROVIDER}"
 
 # Imports
