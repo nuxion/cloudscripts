@@ -8,7 +8,7 @@ STRATEGY=${1:-tar}
 BRANCH=${2:-main}
 if [[ -z "${VERSION}" ]];
 then
-    VERSION=0.6.0
+    VERSION=0.7.0
 fi
 GIT_REPO="https://github.com/nuxion/cloudscripts/"
 TAR_REPO="https://github.com/nuxion/cloudscripts/archive/refs/tags/${VERSION}.tar.gz"

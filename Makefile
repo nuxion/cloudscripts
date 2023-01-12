@@ -32,7 +32,7 @@ docker-dev:
 
 .PHONY: release
 release:
-	  ./release.sh 
+	  ./release.sh ${VERSION}
 
 last:
 	git describe --tags

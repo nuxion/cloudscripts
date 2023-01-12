@@ -36,7 +36,7 @@ chmod +x install.sh
 From `VERSION<=0.5.0`, a version could be pined from the installation:
 
 ```
-curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | VERSION=0.2.0 sh
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | VERSION=0.7.0 sh
 ```
 :warning: *Note*: If you are using it in a ci/cd workflow, some system requires an `apt-get update` first. 
 
