@@ -36,7 +36,7 @@ chmod +x install.sh
 From `VERSION<=0.5.0`, a version could be pined from the installation:
 
 ```
-curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | VERSION=0.7.0 sh
+curl -Ls https://raw.githubusercontent.com/nuxion/cloudscripts/main/install.sh | VERSION=0.7.1 sh
 ```
 :warning: *Note*: If you are using it in a ci/cd workflow, some system requires an `apt-get update` first. 
 
@@ -101,12 +101,7 @@ Also all the scripts are using variables and relative paths, base path and varia
 
 ## Release
 
-1. Update versions files:
-```
-make release VERSION=${NEW_VERSION}
-```
-
-2. `git add . && git commit && git tag -a ${NEW_VERSION} && git push`
+See [RELEASE.md](RELEASE.md) for the full step by step process.
 
 ## Inspirations
 - https://www.serf.io/docs/recipes/event-handler-router.html
