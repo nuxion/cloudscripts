@@ -24,15 +24,13 @@ This runs `release.sh`, which rewrites the version in two places:
 
 - `install.sh` — the fallback `VERSION=` used when the caller does not pin one.
 - `scripts/cscli` — the `VERSION=` that resolves `/opt/cloudscripts-${VERSION}`.
+- `README.md` — the pinned-version example in the installation section.
 
 Review the result before committing:
 
 ```
 git diff
 ```
-
-`release.sh` does **not** touch `README.md`. If the pinned-version example in the
-installation section is now stale, update it by hand in the same commit.
 
 ## 3. Commit and tag
 
